@@ -7,7 +7,6 @@ object Utils {
     }
 
     fun validatePassword(password: String): Boolean {
-        // Add your password validation logic here (e.g., minimum length)
         return password.length >= 8
     }
 
