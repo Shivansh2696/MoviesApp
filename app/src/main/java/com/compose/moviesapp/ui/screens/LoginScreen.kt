@@ -12,15 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -36,12 +31,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.compose.moviesapp.R
 import com.compose.moviesapp.ui.utils.GradientCircularButton
+import com.compose.moviesapp.ui.utils.PasswordTextField
 import com.compose.moviesapp.utils.Utils
 
 @Composable
@@ -51,7 +44,6 @@ fun LoginScreen(
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
 
@@ -107,51 +99,17 @@ fun LoginScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
+        PasswordTextField(
             value = password,
-            onValueChange = {
-                password = it
-                isPasswordValid = Utils.validatePassword(it)
-            },
-            label = { Text(stringResource(R.string.password)) },
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Lock,
-                    contentDescription = stringResource(R.string.password_icon)
-                )
-            },
-            trailingIcon = { // 2. Use trailingIcon
-                val image = if (passwordVisible)
-                    Icons.Filled.Visibility
-                else Icons.Filled.VisibilityOff
-
-                // Localized description for accessibility services
-                val description = if (passwordVisible)
-                    stringResource(R.string.hide_password)
-                else stringResource(R.string.show_password)
-
-                // 3. IconButton for click handling
-                IconButton(onClick = { passwordVisible = !passwordVisible }) { // 5. Toggle state
-                    Icon(imageVector = image, description) // 4. Conditional icon
-                }
-            },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(), // 6. VisualTransformation
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            onValueChange = { password = it },
+            label = stringResource(R.string.password),
+            errorMessage = stringResource(R.string.password_error),
+            validate = { Utils.validatePassword(it) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            isError = !isPasswordValid,
-            supportingText = {
-                if (!isPasswordValid) {
-                    Text(
-                        text = stringResource(R.string.password_error),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
+                .padding(horizontal = 16.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
