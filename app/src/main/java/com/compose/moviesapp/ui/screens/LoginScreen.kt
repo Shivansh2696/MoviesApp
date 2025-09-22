@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.compose.moviesapp.R
+import com.compose.moviesapp.ui.utils.EmailTextField
 import com.compose.moviesapp.ui.utils.GradientCircularButton
 import com.compose.moviesapp.ui.utils.PasswordTextField
 import com.compose.moviesapp.utils.Utils
@@ -42,7 +39,7 @@ fun LoginScreen(
     onNavigateToSignUp: () -> Unit,
     onLoginSuccess: () -> Unit
 ) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
@@ -71,42 +68,26 @@ fun LoginScreen(
                 .padding(start = 25.dp)
         )
 
-        OutlinedTextField(
-            value = username,
-            onValueChange = {
-                username = it
-                isEmailValid = Utils.validateEmail(it)
+        EmailTextField(
+            email = email,
+            onEmailChange = {
+                email = it
+                isEmailValid = Utils.validateEmail(email)
             },
-            label = { Text(stringResource(R.string.username)) },
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Email,
-                    contentDescription = stringResource(R.string.email_icon)
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            isError = !isEmailValid,
-            supportingText = {
-                if (!isEmailValid) {
-                    Text(
-                        text = stringResource(R.string.email_error),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
+            isEmailValid = isEmailValid
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         PasswordTextField(
-            value = password,
-            onValueChange = { password = it },
+            password = password,
+            onPasswordChange = {
+                password = it
+                isPasswordValid = Utils.validatePassword(password)
+            },
             label = stringResource(R.string.password),
             errorMessage = stringResource(R.string.password_error),
-            validate = { Utils.validatePassword(it) },
+            isPasswordValid = isPasswordValid,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -116,15 +97,13 @@ fun LoginScreen(
 
         GradientCircularButton(
             onClick = {
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(context,
-                        context.getString(R.string.enter_username_password), Toast.LENGTH_SHORT).show()
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(context, context.getString(R.string.enter_email_password), Toast.LENGTH_SHORT).show()
                     return@GradientCircularButton
                 }
 
-                if (isEmailValid && isPasswordValid){
-                    Toast.makeText(context,
-                        context.getString(R.string.login_successful), Toast.LENGTH_SHORT).show()
+                if (isEmailValid && isPasswordValid) {
+                    Toast.makeText(context,context.getString(R.string.login_successful), Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier

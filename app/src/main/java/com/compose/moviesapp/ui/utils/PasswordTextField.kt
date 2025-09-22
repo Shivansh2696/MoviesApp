@@ -24,20 +24,19 @@ import com.compose.moviesapp.R
 
 @Composable
 fun PasswordTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
     label: String,
     errorMessage: String,
-    modifier: Modifier = Modifier,
-    validate: (String) -> Boolean
+    isPasswordValid: Boolean,
+    modifier: Modifier = Modifier
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
-    val showError = value.isNotBlank() && !validate(value)
 
     OutlinedTextField(
-        value = value,
+        value = password,
         onValueChange = {
-            onValueChange(it)
+            onPasswordChange(it)
         },
         label = { Text(label) },
         singleLine = true,
@@ -67,9 +66,9 @@ fun PasswordTextField(
             PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = modifier,
-        isError = showError,
+        isError = password.isNotEmpty() && !isPasswordValid,
         supportingText = {
-            if (showError) {
+            if (password.isNotEmpty() && !isPasswordValid) {
                 Text(
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error

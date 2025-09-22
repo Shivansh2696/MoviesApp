@@ -10,4 +10,8 @@ object Utils {
         return password.length >= 8
     }
 
+    fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
+        return password == confirmPassword
+    }
+
 }

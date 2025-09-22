@@ -1,5 +1,6 @@
 package com.compose.moviesapp.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -11,11 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.compose.moviesapp.R
+import com.compose.moviesapp.ui.utils.EmailTextField
+import com.compose.moviesapp.ui.utils.GradientCircularButton
 import com.compose.moviesapp.ui.utils.PasswordTextField
 import com.compose.moviesapp.utils.Utils
 
@@ -39,10 +39,14 @@ fun SignUpScreen(
     onBackToLogin: () -> Boolean
 ) {
 
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var isEmailValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
+    var isConPasswordValid by remember { mutableStateOf(true) }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -55,7 +59,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .border(2.dp, Color.Gray,CircleShape)
+                .border(2.dp, Color.Gray, CircleShape)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -71,42 +75,26 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        OutlinedTextField(
-            value = username,
-            onValueChange = {
-                username = it
-                isEmailValid = Utils.validateEmail(it)
+        EmailTextField(
+            email = email,
+            onEmailChange = {
+                email = it
+                isEmailValid = Utils.validateEmail(email)
             },
-            label = { Text(stringResource(R.string.username)) },
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Email,
-                    contentDescription = stringResource(R.string.email_icon)
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            isError = !isEmailValid,
-            supportingText = {
-                if (!isEmailValid) {
-                    Text(
-                        text = stringResource(R.string.email_error),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
+            isEmailValid = isEmailValid
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         PasswordTextField(
-            value = password,
-            onValueChange = { password = it },
+            password = password,
+            onPasswordChange = {
+                password = it
+                isPasswordValid = Utils.validatePassword(password)
+            },
             label = stringResource(R.string.password),
             errorMessage = stringResource(R.string.password_error),
-            validate = { Utils.validatePassword(it) },
+            isPasswordValid = isPasswordValid,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -116,14 +104,46 @@ fun SignUpScreen(
 
 
         PasswordTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            password = confirmPassword,
+            onPasswordChange = {
+                confirmPassword = it
+                isConPasswordValid = Utils.validateConfirmPassword(password, confirmPassword)
+            },
             label = stringResource(R.string.con_password),
-            errorMessage = stringResource(R.string.password_error),
-            validate = { Utils.validatePassword(it) },
+            errorMessage = stringResource(R.string.confirm_password_error),
+            isPasswordValid = isConPasswordValid,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
+        )
+
+        Spacer(modifier = Modifier.height(5.dp))
+
+        GradientCircularButton(
+            onClick = {
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(context, context.getString(R.string.enter_email_password), Toast.LENGTH_SHORT).show()
+                    return@GradientCircularButton
+                }
+
+                if (confirmPassword.isEmpty()){
+                    Toast.makeText(context, context.getString(R.string.enter_con_password), Toast.LENGTH_SHORT).show()
+                    return@GradientCircularButton
+                }
+
+                if (confirmPassword != password){
+                    Toast.makeText(context, context.getString(R.string.confirm_password_error), Toast.LENGTH_SHORT).show()
+                    return@GradientCircularButton
+                }
+
+                if (isEmailValid && isPasswordValid && isConPasswordValid) {
+                    Toast.makeText(context, context.getString(R.string.register_success), Toast.LENGTH_SHORT).show()
+                    onBackToLogin.invoke()
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(end = 45.dp)
         )
     }
 }
