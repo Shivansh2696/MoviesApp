@@ -1,4 +1,4 @@
-package com.compose.moviesapp.ui.screens
+package com.compose.moviesapp.presentation.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -29,10 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.compose.moviesapp.R
-import com.compose.moviesapp.ui.utils.EmailTextField
-import com.compose.moviesapp.ui.utils.GradientCircularButton
-import com.compose.moviesapp.ui.utils.PasswordTextField
-import com.compose.moviesapp.utils.Utils
+import com.compose.moviesapp.presentation.utils.EmailTextField
+import com.compose.moviesapp.presentation.utils.GradientCircularButton
+import com.compose.moviesapp.presentation.utils.PasswordTextField
+import com.compose.moviesapp.core.Utils
 
 @Composable
 fun LoginScreen(
@@ -45,6 +45,8 @@ fun LoginScreen(
     var isPasswordValid by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
+    val enterEmailPasswordText = stringResource(R.string.enter_email_password)
+    val loginSuccessfulText = stringResource(R.string.login_successful)
 
     Column(
         modifier = Modifier
@@ -98,12 +100,13 @@ fun LoginScreen(
         GradientCircularButton(
             onClick = {
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(context, context.getString(R.string.enter_email_password), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, enterEmailPasswordText, Toast.LENGTH_SHORT).show()
                     return@GradientCircularButton
                 }
 
                 if (isEmailValid && isPasswordValid) {
-                    Toast.makeText(context,context.getString(R.string.login_successful), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, loginSuccessfulText, Toast.LENGTH_SHORT).show()
+                    onLoginSuccess()
                 }
             },
             modifier = Modifier

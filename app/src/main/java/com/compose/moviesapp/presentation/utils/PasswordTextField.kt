@@ -1,4 +1,4 @@
-package com.compose.moviesapp.ui.utils
+package com.compose.moviesapp.presentation.utils
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons

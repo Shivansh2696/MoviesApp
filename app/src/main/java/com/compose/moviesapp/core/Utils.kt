@@ -1,9 +1,11 @@
-package com.compose.moviesapp.utils
+package com.compose.moviesapp.core
+
+import android.util.Patterns
 
 object Utils {
 
     fun validateEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     fun validatePassword(password: String): Boolean {

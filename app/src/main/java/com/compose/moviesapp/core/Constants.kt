@@ -1,4 +1,4 @@
-package com.compose.moviesapp.utils
+package com.compose.moviesapp.core
 
 class Constants {
     companion object{

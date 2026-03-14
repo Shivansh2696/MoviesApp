@@ -1,4 +1,4 @@
-package com.compose.moviesapp.ui.screens
+package com.compose.moviesapp.presentation.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -29,14 +29,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.compose.moviesapp.R
-import com.compose.moviesapp.ui.utils.EmailTextField
-import com.compose.moviesapp.ui.utils.GradientCircularButton
-import com.compose.moviesapp.ui.utils.PasswordTextField
-import com.compose.moviesapp.utils.Utils
+import com.compose.moviesapp.presentation.utils.EmailTextField
+import com.compose.moviesapp.presentation.utils.GradientCircularButton
+import com.compose.moviesapp.presentation.utils.PasswordTextField
+import com.compose.moviesapp.core.Utils
 
 @Composable
 fun SignUpScreen(
-    onBackToLogin: () -> Boolean
+    onBackToLogin: () -> Unit
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -47,6 +47,10 @@ fun SignUpScreen(
     var isConPasswordValid by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
+    val enterEmailPasswordText = stringResource(R.string.enter_email_password)
+    val enterConfirmPasswordText = stringResource(R.string.enter_con_password)
+    val confirmPasswordErrorText = stringResource(R.string.confirm_password_error)
+    val registerSuccessText = stringResource(R.string.register_success)
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -122,23 +126,23 @@ fun SignUpScreen(
         GradientCircularButton(
             onClick = {
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(context, context.getString(R.string.enter_email_password), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, enterEmailPasswordText, Toast.LENGTH_SHORT).show()
                     return@GradientCircularButton
                 }
 
                 if (confirmPassword.isEmpty()){
-                    Toast.makeText(context, context.getString(R.string.enter_con_password), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, enterConfirmPasswordText, Toast.LENGTH_SHORT).show()
                     return@GradientCircularButton
                 }
 
                 if (confirmPassword != password){
-                    Toast.makeText(context, context.getString(R.string.confirm_password_error), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, confirmPasswordErrorText, Toast.LENGTH_SHORT).show()
                     return@GradientCircularButton
                 }
 
                 if (isEmailValid && isPasswordValid && isConPasswordValid) {
-                    Toast.makeText(context, context.getString(R.string.register_success), Toast.LENGTH_SHORT).show()
-                    onBackToLogin.invoke()
+                    Toast.makeText(context, registerSuccessText, Toast.LENGTH_SHORT).show()
+                    onBackToLogin()
                 }
             },
             modifier = Modifier

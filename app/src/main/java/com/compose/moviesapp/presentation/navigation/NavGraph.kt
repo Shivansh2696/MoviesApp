@@ -1,12 +1,12 @@
-package com.compose.moviesapp.navigation
+package com.compose.moviesapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.compose.moviesapp.ui.screens.DashboardScreen
-import com.compose.moviesapp.ui.screens.LoginScreen
-import com.compose.moviesapp.ui.screens.SignUpScreen
+import com.compose.moviesapp.presentation.ui.screens.DashboardScreen
+import com.compose.moviesapp.presentation.ui.screens.LoginScreen
+import com.compose.moviesapp.presentation.ui.screens.SignUpScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {

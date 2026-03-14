@@ -1,4 +1,4 @@
-package com.compose.moviesapp.navigation
+package com.compose.moviesapp.presentation.navigation
 
 object NavRoutes {
     const val LOGIN = "login"

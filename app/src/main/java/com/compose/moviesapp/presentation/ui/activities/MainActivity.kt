@@ -1,4 +1,4 @@
-package com.compose.moviesapp
+package com.compose.moviesapp.presentation.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,10 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.compose.moviesapp.navigation.NavGraph
-import com.compose.moviesapp.ui.screens.LoginScreen
-import com.compose.moviesapp.ui.theme.MoviesAppTheme
-
+import com.compose.moviesapp.presentation.navigation.NavGraph
+import com.compose.moviesapp.presentation.theme.MoviesAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,11 +19,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MoviesAppTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.Companion.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavGraph( navController = navController )
+                    NavGraph(navController = navController)
                 }
             }
         }

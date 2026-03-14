@@ -1,4 +1,4 @@
-package com.compose.moviesapp.ui.utils
+package com.compose.moviesapp.presentation.utils
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
